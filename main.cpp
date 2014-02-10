@@ -2,6 +2,7 @@
 #include <cstring>      // Needed for memset
 #include <sys/socket.h> // Needed for the socket functions
 #include <netdb.h>      // Needed for the socket functions
+#include <unistd.h>
 
 int main(int argc, const char * argv[])
 {
@@ -46,13 +47,13 @@ int main(int argc, const char * argv[])
     if (status == -1)  std::cout << "connect error" ;
     
     std::cout << "send()ing message..."  << std::endl;
-    char *msg = "GET / HTTP/1.1\nhost: www.google.com\n\n";
+    char *msg = "message to receive";
     int len;
     ssize_t bytes_sent;
     len = strlen(msg);
     bytes_sent = send(socketfd, msg, len, 0);
     
-    std::cout << "Waiting to recieve data..."  << std::endl;
+    std::cout << "Waiting to recieve data..."  << msg << std::endl;
     ssize_t bytes_recieved;
     char incoming_data_buffer[1000];
     bytes_recieved = recv(socketfd, incoming_data_buffer,1000, 0);
@@ -62,5 +63,6 @@ int main(int argc, const char * argv[])
     std::cout << bytes_recieved << " bytes recieved :" << std::endl ;
     std::cout << incoming_data_buffer << std::endl;
     
+    close(socketfd);
     return 0;
 }
